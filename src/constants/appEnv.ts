@@ -6,5 +6,6 @@ export const appEnv = {
   learnosity: {
     consumerKey: process.env.LEARNOSITY_CONSUMER_KEY,
     consumerSecret: process.env.LEARNOSITY_CONSUMER_SECRET,
+    domain: process.env.LEARNOSITY_DOMAIN,
   },
 };

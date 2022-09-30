@@ -25,6 +25,7 @@
     "@types/morgan": "^1.9.3",
     "@types/node": "^16.4.2",
     "@types/node-json-db": "^0.9.3",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.33.0",
     "@typescript-eslint/parser": "^5.33.0",
     "axios": "^0.25.0",
