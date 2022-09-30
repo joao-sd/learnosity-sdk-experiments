@@ -1,5 +1,5 @@
 export interface ILearnosityInitConfig {
-  regions: string;
+  [key: string]: any;
 }
 
 export type LearnosityInitStates = "initial" | "resume" | "review";
@@ -18,14 +18,14 @@ export interface ILearnositySecurityCredentials {
 // Request types
 
 export interface ILearnosityActivityRequestPayload {
-  activity_template_id: string;
-  session_id: string;
-  activity_id: string;
-  rendering_type: LearnosityRenderingType;
-  type: LearnosityStudentResponseStorageType;
-  name: string;
-  state: LearnosityInitStates;
-  config: ILearnosityInitConfig;
+  activity_template_id: string; // reference of the Activity to retrieve from the Item bank. The Activity defines which Items will be served in this assessment.
+  session_id: string; // uniquely identifies this specific assessment attempt for save/resume, data retrieval and reporting purposes. Here, we're using the Uuid helper to auto-generate a unique session id.
+  activity_id: string; // a string you define, used solely for analytics to allow you run reporting and compare results of users submitting the same assessment.
+  rendering_type: LearnosityRenderingType; // selects a rendering mode, assess mode is a "standalone" mode (loading a complete assessment player for navigation, as opposed to inline for embedding without).
+  type: LearnosityStudentResponseStorageType; // selects the context for the student response storage. submit_practice mode means the student responses will be stored in the Learnosity cloud, allowing for grading and review.
+  name: string; // human-friendly display name to be shown in reporting, via Reports API and Data API.
+  state?: LearnosityInitStates; // - Optional. Can be set to initial, resume or review. initial is the default.
+  config?: ILearnosityInitConfig; // Optional. A set of config values that can override the Activity configuration. For a full list of overridable configuration options, visit the Activities developer docs.
 }
 
 interface ILearnosityQuestion {
