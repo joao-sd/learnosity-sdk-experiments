@@ -4,11 +4,13 @@ import { provide } from "inversify-binding-decorators";
 import Learnosity from "learnosity-sdk-nodejs";
 import {
   ILearnosityInitConfig,
+  ILearnosityResponse,
   ILearnositySecurityCredentials,
   LearnosityAvailableAPIs,
   LearnosityDataActions,
   LearnosityInitStates,
   LearnosityRenderingType,
+  LearnosityRequestTypes,
 } from "./LearnosityService.types";
 
 const DEFAULT_SECURITY_CREDENTIALS = {
@@ -29,46 +31,25 @@ export class LearnosityService {
    * @param {string} name: human-friendly display name to be shown in reporting, via Reports API and Data API.
    * @param {LearnosityInitStates} state - Optional. Can be set to initial, resume or review. initial is the default.
    * @param {ILearnosityInitConfig} config - Optional. A set of config values that can override the Activity configuration. For a full list of overridable configuration options, visit the Activities developer docs.
-   * @param {ILearnositySecurityCredentials} securityCredentials: An object^ that includes your consumer_key but does not include your secret. T 
-   * @param {LearnosityDataActions} dataAction: An optional string used only if integrating with the Data API.  
-
-
-
-
+   * @param {ILearnositySecurityCredentials} securityCredentials: An object^ that includes your consumer_key but does not include your secret. T
+   * @param {LearnosityDataActions} dataAction: An optional string used only if integrating with the Data API.
    * @return void
    */
 
   public init(
     userId: string,
-    sessionId: string,
-    name: string,
-    activityTemplateId: string,
-    activityId: string,
-
     accessApi: LearnosityAvailableAPIs,
-    studentResponseStorageType: string,
-    renderingType: LearnosityRenderingType = "assess",
-    state: LearnosityInitStates = "initial",
-    config: ILearnosityInitConfig,
+    requestPayload: LearnosityRequestTypes,
     securityCredentials: ILearnositySecurityCredentials = { ...DEFAULT_SECURITY_CREDENTIALS, user_id: userId },
     dataAction?: LearnosityDataActions
-  ): void {
+  ): ILearnosityResponse {
     const learnositySdk = new Learnosity(); // Instantiate the SDK
 
     return learnositySdk.init(
-      accessApi, // what api to initialize
+      accessApi,
       securityCredentials,
       appEnv.learnosity.consumerSecret,
-      {
-        activity_template_id: activityTemplateId,
-        session_id: sessionId,
-        activity_id: activityId,
-        rendering_type: renderingType,
-        type: studentResponseStorageType,
-        name,
-        state,
-        config,
-      },
+      requestPayload,
       dataAction
     );
   }

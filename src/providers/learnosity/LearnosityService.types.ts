@@ -49,3 +49,25 @@ export interface ILearnosityQuestionRequestPayload {
 export interface ILearnosityDataRequestPayload {
   references: string[];
 }
+
+export type LearnosityRequestTypes =
+  | ILearnosityDataRequestPayload
+  | ILearnosityQuestionRequestPayload
+  | ILearnosityActivityRequestPayload;
+
+export interface ILearnosityResponse {
+  request: ILearnosityResponseRequest;
+}
+
+export interface ILearnosityResponseRequest {
+  security: ILearnosityRequestResponseSecurity;
+  request: Record<string, unknown>;
+}
+
+export interface ILearnosityRequestResponseSecurity {
+  consumer_key: string;
+  domain: string;
+  user_id: string;
+  timestamp: string;
+  signature: string;
+}

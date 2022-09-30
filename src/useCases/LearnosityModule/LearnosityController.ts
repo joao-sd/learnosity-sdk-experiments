@@ -21,20 +21,18 @@ export class LearnosityController implements interfaces.Controller {
       const userId = uuidv4();
       const sessionId = uuidv4();
 
-      const request = this.learnosityService.init(
-        userId,
-        sessionId,
-        "Items API Quickstart",
-        "quickstart_examples_activity_template_001",
-        "quickstart_examples_activity_001",
-        "items",
-        "submit_practice",
-        "assess",
-        "initial",
-        {
+      const request = this.learnosityService.init(userId, "items", {
+        activity_template_id: "quickstart_examples_activity_template_001",
+        session_id: sessionId,
+        activity_id: "quickstart_examples_activity_001",
+        rendering_type: "assess",
+        type: "submit_practice",
+        name: "Items API Quickstart",
+        state: "initial",
+        config: {
           regions: "main",
-        }
-      );
+        },
+      });
 
       return res.status(200).send({ request });
     } catch (error) {
