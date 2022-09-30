@@ -2,15 +2,20 @@ import { appEnv } from "@constants/appEnv";
 import { provide } from "inversify-binding-decorators";
 
 import Learnosity from "learnosity-sdk-nodejs";
+import {
+  ILearnosityInitConfig,
+  ILearnositySecurityCredentials,
+  LearnosityAvailableAPIs,
+  LearnosityDataActions,
+  LearnosityInitStates,
+  LearnosityRenderingType,
+} from "./LearnosityService.types";
 
-export interface ILearnosityInitConfig {
-  regions: string;
-}
+const DEFAULT_SECURITY_CREDENTIALS = {
+  consumer_key: appEnv.learnosity.consumerKey,
+  domain: appEnv.learnosity.domain,
+};
 
-export type LearnosityInitStates = "initial" | "resume" | "review";
-export type LearnosityRenderingType = "assess" | "inline";
-export type LearnosityStudentResponseStorageType = "submit_practice";
-export type LearnosityAvailableAPIs = "items" | "questions" | "data";
 @provide(LearnosityService)
 export class LearnosityService {
   /**
@@ -24,6 +29,12 @@ export class LearnosityService {
    * @param {string} name: human-friendly display name to be shown in reporting, via Reports API and Data API.
    * @param {LearnosityInitStates} state - Optional. Can be set to initial, resume or review. initial is the default.
    * @param {ILearnosityInitConfig} config - Optional. A set of config values that can override the Activity configuration. For a full list of overridable configuration options, visit the Activities developer docs.
+   * @param {ILearnositySecurityCredentials} securityCredentials: An object^ that includes your consumer_key but does not include your secret. T 
+   * @param {LearnosityDataActions} dataAction: An optional string used only if integrating with the Data API.  
+
+
+
+
    * @return void
    */
 
@@ -38,18 +49,15 @@ export class LearnosityService {
     studentResponseStorageType: string,
     renderingType: LearnosityRenderingType = "assess",
     state: LearnosityInitStates = "initial",
-
-    config: ILearnosityInitConfig
+    config: ILearnosityInitConfig,
+    securityCredentials: ILearnositySecurityCredentials = { ...DEFAULT_SECURITY_CREDENTIALS, user_id: userId },
+    dataAction?: LearnosityDataActions
   ): void {
     const learnositySdk = new Learnosity(); // Instantiate the SDK
 
     return learnositySdk.init(
       accessApi, // what api to initialize
-      {
-        consumer_key: appEnv.learnosity.consumerKey,
-        domain: appEnv.learnosity.domain,
-        user_id: userId,
-      },
+      securityCredentials,
       appEnv.learnosity.consumerSecret,
       {
         activity_template_id: activityTemplateId,
@@ -60,7 +68,8 @@ export class LearnosityService {
         name,
         state,
         config,
-      }
+      },
+      dataAction
     );
   }
 }
