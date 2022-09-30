@@ -1,3 +1,5 @@
+//! These types follow the Learnosity SDK documentation: https://github.com/Learnosity/learnosity-sdk-nodejs/blob/master/REFERENCE.md#init-arguments
+
 export interface ILearnosityInitConfig {
   [key: string]: any;
 }
